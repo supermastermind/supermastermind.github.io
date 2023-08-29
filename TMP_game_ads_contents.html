@@ -59,13 +59,6 @@
             }
         })()*/
 
-    </script>
-
-  </head>
-
-<body>
-  <script>
-
 // Create a new MutationObserver instance
 var observer = new MutationObserver(function(mutations) {
   // Loop through the mutations
@@ -92,14 +85,47 @@ var observer = new MutationObserver(function(mutations) {
 // Start observing the body element for child node changes
 observer.observe(document.head, {childList: true});
 
-// Start observing the body element for child node changes
-observer.observe(document.body, {childList: true});
 
-  </script>
+    </script>
 
     <!-- Ezoic Code -->
     <script src="//www.ezojs.com/basicads.js?d=supermastermind.github.io" type="text/javascript"></script>
     <!-- Ezoic Code -->
+
+  </head>
+
+<body>
+  <script>
+
+// Create a new MutationObserver instance
+var observer2 = new MutationObserver(function(mutations) {
+  // Loop through the mutations
+  mutations.forEach(function(mutation) {
+    // Check if new nodes were added
+    if (mutation.addedNodes.length > 0) {
+      // Loop through the added nodes
+      mutation.addedNodes.forEach(function(node) {
+        // Check if the node is an element node
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          // Check if the node has the data-ez-name attribute
+          if (node.hasAttribute('data-ez-name')) {
+            // Do something with the node, such as logging its value
+            console.log(node.getAttribute('data-ez-name'));
+            // Print something to the console
+            console.log('A new data-ez-name element was added #2');
+          }
+        }
+      });
+    }
+  });
+});
+
+// Start observing the body element for child node changes
+observer2.observe(document.head, {childList: true});
+
+
+  </script>
+
 
 
   <center>
@@ -108,6 +134,7 @@ observer.observe(document.body, {childList: true});
   </center>
 
   <script>
+  var my_ad;
 /*    function runAfterPageLoad() {
         console.log("runAfterPageLoad executed");
         // Get all the ezoic ads elements
@@ -124,7 +151,8 @@ observer.observe(document.body, {childList: true});
 
         // Add an event listener to each ad element
         ads.forEach(function(ad) {
-          console.log("addEventListener");
+          my_ad = ad;
+          console.log("addEventListener" + ad);
           ad.addEventListener("load", function() {
             // Increment the counter
             adsLoaded++;
