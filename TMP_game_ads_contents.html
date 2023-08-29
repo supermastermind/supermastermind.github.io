@@ -48,22 +48,26 @@
         }
         return cnt;
     }
-    function checkEzoicAdsFullyLoaded() {
+    // 0: no ads present
+    // 1: no ads loaded
+    // 2: ads partially loaded
+    // 3: ads fully loaded
+    function checkIfEzoicAdsLoaded() {
         var nbEzoicAdsPresent = lookForEzoicAds();
         if (nbEzoicAdsPresent == 0) {
             return 0;
         }
         var nbEzoicAdsLoaded = nbOfOccurrences(document.body.innerHTML, "data-load-complete=\"true\"");
         if (nbEzoicAdsLoaded >= nbEzoicAdsPresent) {
-            return 2;
+            return 3;
         }
-        return 1;
+        return ((nbEzoicAdsLoaded > 0) ? 2 : 1);
     }
 
   var time_ini = new Date().getTime();
   function instr() {
     var duration = (new Date().getTime() - time_ini) / 1000;
-    console.log("-> " + duration + "s: status: " + checkEzoicAdsFullyLoaded());
+    console.log("-> " + duration + "s: status: " + checkIfEzoicAdsLoaded());
     if (duration <= 15) { // 15 seconds
         setTimeout("instr()", 10);
     }
