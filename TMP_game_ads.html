@@ -31,7 +31,7 @@
       function startGame() {
         if ( (my_button == null) || (!my_button.disabled) ) {
           localStorage.lastGameAdsDisplayTime = (new Date()).getTime(); // line duplicated in TMP_game.html
-          window.parent.postMessage("stopShowingAdsMsg", "*"); // (direct function call between child and parent iframes is not allowed => a message is posted)
+          window.parent.postMessage("stopShowingAdsMsg", "*"); // (direct function call between child and parent iframe is not allowed => a message is posted)
         }
       }
     </script>
