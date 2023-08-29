@@ -49,38 +49,55 @@ In this algorithm, only the possible/logical codes are considered at each stage 
 
     // run at start up and each time localStorage.gamesok is updated or on new game
     function showAdsIfNeeded() {
-        if (ads_iframe == null) {
-            var adsDisplayGamesOkThld = 40;
-            if (localStorage.gamesok && (localStorage.gamesok >= adsDisplayGamesOkThld*3/4)) {
-                var adsDisplayPeriod = 10*1000; // XXX 10 hours
-                var minAdsDisplayPeriod = 3*1000; // XXX 2 hours
-                if ( (!localStorage.lastGameAdsDisplayTime || ((new Date()).getTime() - localStorage.lastGameAdsDisplayTime > adsDisplayPeriod))
-                     || (localStorage.lastGameAdsDisplayGamesOk && (localStorage.gamesok >= localStorage.lastGameAdsDisplayGamesOk + adsDisplayGamesOkThld)) ) {
-                    localStorage.lastGameAdsDisplayTime = (new Date()).getTime() - (adsDisplayPeriod - minAdsDisplayPeriod); // line duplicated in TMP_game_ads.html
-                    localStorage.lastGameAdsDisplayGamesOk = localStorage.gamesok;
-                    ads_iframe = document.createElement('iframe');
-                    ads_iframe.id = 'game_ads_frame';
-                    ads_iframe.src = 'TMP_game_ads.html';
-                    ads_iframe.style.position = 'fixed';
-                    ads_iframe.style.top = '0%';
-                    ads_iframe.style.left = '0%';
-                    ads_iframe.style.width = '100%';
-                    ads_iframe.style.height = '100%';
-                    ads_iframe.style.border = 'none';
-                    ads_iframe.style.zIndex = -10;
-                    ads_iframe.style.opacity = 0.0;
-                    // ads_iframe.style.display = 'none'; // not displayed as long as ads are not loaded
-                    ads_iframe.style.zIndex = -1;
-                    ads_iframe.onload = function() {
-                        console.log('(ads iframe contents loaded)');
-                    }
-                    document.body.appendChild(ads_iframe); // Note: ads will take some time to load completely
-                }
-            }
+
+        var adsDisplayGamesOkThld = 40;
+        var adsDisplayPeriod = 10*1000; // XXX 10 hours
+        var minAdsDisplayPeriod = 3*1000; // XXX 2 hours
+        var adsCondition = 
+            ( (localStorage.gamesok && (localStorage.gamesok >= adsDisplayGamesOkThld*3/4))
+              && ( (!localStorage.lastGameAdsDisplayTime || ((new Date()).getTime() - localStorage.lastGameAdsDisplayTime > adsDisplayPeriod))
+                   || (localStorage.lastGameAdsDisplayGamesOk && (localStorage.gamesok >= localStorage.lastGameAdsDisplayGamesOk + adsDisplayGamesOkThld)) )
+            );
+
+        if (!adsCondition) {
+            return;
         }
 
-        if ((ads_iframe != null) && wereAdsLoaded) { // this condition will becomre true some time after ads_iframe creation 
+        // *****************
+        // Create ads_iframe 
+        // *****************
+
+        if (ads_iframe == null) {
+            ads_iframe = document.createElement('iframe');
+            ads_iframe.id = 'game_ads_frame';
+            ads_iframe.src = 'TMP_game_ads.html';
+            ads_iframe.style.position = 'fixed';
+            ads_iframe.style.top = '0%';
+            ads_iframe.style.left = '0%';
+            ads_iframe.style.width = '100%';
+            ads_iframe.style.height = '100%';
+            ads_iframe.style.border = 'none';
+            ads_iframe.style.zIndex = -10; // not displayed as long as ads are not loaded (1/2)
+            ads_iframe.style.opacity = 0.0; // not displayed as long as ads are not loaded (2/2)
+            // ads_iframe.style.display = 'none'; // does not work because prevents ads loading in background
+            ads_iframe.style.zIndex = -1;
+            ads_iframe.onload = function() {
+                console.log('(ads iframe contents loaded)');
+            }
+            document.body.appendChild(ads_iframe); // Note: ads will take some time to load completely
+            // XXX async script possible for those steps for parallelism? (is parallelism possible?) worker for // ops?
+        }
+
+        // ***********************************************
+        // Display ads_iframe some time after its creation
+        // ***********************************************
+
+        else if (wereAdsLoaded) {
+            localStorage.lastGameAdsDisplayTime = (new Date()).getTime() - (adsDisplayPeriod - minAdsDisplayPeriod); // line duplicated in TMP_game_ads.html
+            localStorage.lastGameAdsDisplayGamesOk = localStorage.gamesok;
+
             // ads_iframe.style.display = 'block';
+            ads_iframe.contentWindow.postMessage("reinitButton", "*");
             ads_iframe.style.zIndex = 10;
             ads_iframe.style.opacity = 1.0;
         }
@@ -88,9 +105,9 @@ In this algorithm, only the possible/logical codes are considered at each stage 
 
     function stopShowingAds() {
         if (ads_iframe != null) {
-            // ads_iframe.style.display = 'none';
-            ads_iframe.style.zIndex = -10;
-            ads_iframe.style.opacity = 0.0;
+            ads_iframe.style.zIndex = -10; // not displayed (1/2)
+            ads_iframe.style.opacity = 0.0; // not displayed (2/2)
+            // ads_iframe.style.display = 'none'; // does not work because prevents ads loading in background
         }
     }
 
@@ -98,7 +115,7 @@ In this algorithm, only the possible/logical codes are considered at each stage 
       if (event.data === "stopShowingAdsMsg") {
         stopShowingAds();
       }
-      if (event.data === "adsWereLoaded") {
+      else if (event.data === "adsWereLoaded") {
         console.log("adsLoaded upmost level");
         wereAdsLoaded = true;
       }

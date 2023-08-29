@@ -65,7 +65,7 @@
     }
 
   var time_ini = new Date().getTime();
-  function instr() {
+  function instr() { // Periodical mechanism adopted - other means would be to use an observer of below dynamic ezoic element additions
     var duration = (new Date().getTime() - time_ini) / 1000;
     var adsLoadStatus = checkIfEzoicAdsLoaded();
     console.log("-> " + duration + "s: status: " + adsLoadStatus);

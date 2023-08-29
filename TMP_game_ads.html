@@ -22,9 +22,6 @@
         -webkit-backface-visibility: visible;
       }
     </style>
-
-    <link rel="stylesheet" type="text/css" href="style/style.css">
-    <!-- XXX text style shall be as in index.html -->
  
     <script>
       var my_button = null;
@@ -43,25 +40,50 @@
     <a onclick="startGame();"><img alt='Get it on Google Play' style='width:5.5rem;margin-top:0.5rem;margin-bottom:0.5rem;border-radius:7%' src='img/Playstore_icon.png'/></a>
     <br>
     <div style='width:80%;margin:0'>
+        <font style='font-family: Trebuchet MS;font-size:1rem;'>
         To bring (small) revenue to the website, ads are sometimes displayed.<br>Have a look at them if you're interested, then just click below button to start playing:</b>
+        </font>
     </div>
     <br>
     <button id='ads_button' class='ads_button_class' onclick="startGame();"></button>
     <br>
 
     <script>
-        my_button = document.getElementById('ads_button');
-        my_button.disabled = true;
-        var adsDisplayTimeInSeconds = 5;
-        for (var i = 0; i <= adsDisplayTimeInSeconds; i++) {
-            var timeToWait = i*1000;
-            if (i < adsDisplayTimeInSeconds) {
-                setTimeout("my_button.innerHTML = '&nbsp;Please wait for " + (adsDisplayTimeInSeconds - i) + " s&nbsp;';", timeToWait);
+
+        function setButton(str, enabled) {
+            if (enabled) {
+                my_button.disabled = false; 
+                my_button.style.color = 'red'; 
+                my_button.style.fontSize = '130%'; 
+                my_button.innerHTML = str;
             }
             else {
-                setTimeout("my_button.disabled = false; my_button.style.color = 'red'; my_button.style.fontSize = '130%'; my_button.innerHTML = '&nbsp;&nbsp;&nbsp;START PLAYING&nbsp;&nbsp;&nbsp;';", timeToWait);
+                my_button.disabled = true; 
+                my_button.style.color = 'black'; 
+                my_button.style.fontSize = '100%'; 
+                my_button.innerHTML = str;
             }
         }
+
+        var startGameButtonStr = "&nbsp;&nbsp;&nbsp;START PLAYING&nbsp;&nbsp;&nbsp;";
+        my_button = document.getElementById('ads_button');
+        setButton(startGameButtonStr, false);
+        
+        window.addEventListener("message", function(event) {
+          if (event.data === "reinitButton") {
+            var adsDisplayTimeInSeconds = 5;
+            for (var i = 0; i <= adsDisplayTimeInSeconds; i++) {
+                var timeToWait = i*1000;
+                if (i < adsDisplayTimeInSeconds) {
+                    setTimeout("setButton('&nbsp;Please wait for " + (adsDisplayTimeInSeconds - i) + " s&nbsp;', false);", timeToWait);
+                }
+                else {
+                    setTimeout("setButton('" + startGameButtonStr + "', true);", timeToWait);
+                }
+            }
+          }
+        });
+
     </script>
 
     <div style="width:80%;"><span style="border:0px;border-radius:20%;color:#FFFFFF;background-color:#BBBBBB"><small><b>&nbsp;&nbsp;Ads&nbsp;&nbsp;</b></small></span></div>
