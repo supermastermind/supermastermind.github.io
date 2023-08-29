@@ -85,21 +85,23 @@ In this algorithm, only the possible/logical codes are considered at each stage 
                 console.log('(ads iframe contents loaded)');
             }
             document.body.appendChild(ads_iframe); // Note: ads will take some time to load completely
+            console.log("ads_iframe created");
             // XXX async script possible for those steps for parallelism? (is parallelism possible?) worker for // ops?
         }
 
-        // ***********************************************
-        // Display ads_iframe some time after its creation
-        // ***********************************************
+        // ********************************************
+        // Show ads_iframe some time after its creation
+        // ********************************************
 
         else if (wereAdsLoaded) {
             localStorage.lastGameAdsDisplayTime = (new Date()).getTime() - (adsDisplayPeriod - minAdsDisplayPeriod); // line duplicated in TMP_game_ads.html
             localStorage.lastGameAdsDisplayGamesOk = localStorage.gamesok;
 
-            // ads_iframe.style.display = 'block';
             ads_iframe.contentWindow.postMessage("reinitButton", "*");
             ads_iframe.style.zIndex = 10;
             ads_iframe.style.opacity = 1.0;
+            // ads_iframe.style.display = 'block';
+            console.log("ads_iframe shown");
         }
     }
 
@@ -108,6 +110,7 @@ In this algorithm, only the possible/logical codes are considered at each stage 
             ads_iframe.style.zIndex = -10; // not displayed (1/2)
             ads_iframe.style.opacity = 0.0; // not displayed (2/2)
             // ads_iframe.style.display = 'none'; // does not work because prevents ads loading in background
+            console.log("ads_iframe not shown");
         }
     }
 
