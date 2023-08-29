@@ -25,7 +25,7 @@
   <script>
     var last_ezoic_ad;
     var last_ezoic_ads_cnt = 0;
-    function checkEzoicAdsPresence() {
+    function lookForEzoicAds() {
         // Get all ezoic ads elements currently inserted
         var ads = document.querySelectorAll("[data-ez-name]"); // data-ez-name is part of ad's attributes
         var ads_cnt = 0;
@@ -39,15 +39,32 @@
         }
         return last_ezoic_ads_cnt;
     }
+    function nbOfOccurrences(str, substr) {
+        var cnt = 0;
+        var idx = str.indexOf(substr);
+        while (idx != -1) {
+            cnt++;
+            idx = str.indexOf(substr, idx + substr.length);
+        }
+        return cnt;
+    }
     function checkEzoicAdsFullyLoaded() {
-        return (document.body.innerHTML.indexOf("data-load-complete=\"true\"") != -1);
+        var nbEzoicAdsPresent = lookForEzoicAds();
+        if (nbEzoicAdsPresent == 0) {
+            return 0;
+        }
+        var nbAdsLoaded = nbOfOccurrences(document.body.innerHTML, "data-load-complete=\"true\"");
+        if (nbAdsLoaded >= nbEzoicAdsPresent) {
+            return 2;
+        }
+        return 1;
     }
 
   var time_ini = new Date().getTime();
   function instr() {
     var duration = (new Date().getTime() - time_ini) / 1000;
-    console.log("-> " + duration + "s: " + checkEzoicAdsPresence() + (checkEzoicAdsFullyLoaded() ? " completed" : ""));
-    if (duration <= 10) {
+    console.log("-> " + duration + "s: status: " + checkEzoicAdsFullyLoaded());
+    if (duration <= 15) { // 15 seconds
         setTimeout("instr()", 10);
     }
   }
