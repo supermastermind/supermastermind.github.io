@@ -102,7 +102,8 @@ function divAdded() {
 }
 
 // Define a function to run when a mutation occurs
-var last_node = null;
+var nodes = new Array(100);
+var node_idx = 0;
 var last_ezoic_node = null;
 function mutationCallback(mutations) {
   // Loop through the mutations
@@ -113,7 +114,8 @@ function mutationCallback(mutations) {
       for (var node of mutation.addedNodes) {
         // Check if the node is a <div> element with the class myClass
         console.log("TOTO" + node.nodeType + node.nodeName + node.class);
-        last_node = node;
+        nodes[node_idx] = node;
+        node_idx++;
         // document.body.innerHTML shows <div class=\"ezoic-basic-ad\"><span id=\"ezoic-pub-ad-placeholder-103\"><div><span class=\"ezoic-ad\" style=\"display:block !important;float:none !important;line-height:0px;margin-bottom:15px !important;margin-left:auto !important;margin-right:auto !important;margin-top:15px !important;max-width:100% !important;min-height:90px;min-width:970px;padding:0;text-align:center !important;\" data-ez-name=\"supermastermind_github_io-box-2\"><span id=\"div-gpt-ad-supermastermind_github_io-box-2-0\" ezaw=\"970\" ezah=\"90\" style=\"position: relative; z-index: 0; padding: 0px; min-height: 90px; min-width: 970px;\" class=\"ezoic-ad\" data-google-query-id=\"COmVtefFgYEDFfFAHQkdK5wL0A\"><div id=\"google_ads_iframe_/21732118914,22945430322/supermastermind_github_io-box-2_0__container__\" style=\"border: 0pt none;\"><iframe id=\"google_ads_iframe_/21732118914,22945430322/supermastermind_github_io-box-2_0\" name=\"google_ads_iframe_/21732118914,22945430322/supermastermind_github_io-box-2_0\" title=\"3rd party ad content\" scrolling=\"no\" marginwidth=\"0\" marginheight=\"0\" style=\"border: 0px none; vertical-align: bottom;\" role=\"region\" aria-label=\"Advertisement\" tabindex=\"0\" data-google-container-id=\"1\" data-load-complete=\"true\" width=\"970\" height=\"90\" frameborder=\"0\"></iframe></div></span></span></div></span></div>
         if ((node.nodeType === 1) && (node.nodeName === "DIV") && (String(node.class).indexOf("ezoic-basic-ad") != -1)) {
           // Run the divAdded function
