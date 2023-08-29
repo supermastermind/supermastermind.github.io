@@ -53,8 +53,8 @@
         if (nbEzoicAdsPresent == 0) {
             return 0;
         }
-        var nbAdsLoaded = nbOfOccurrences(document.body.innerHTML, "data-load-complete=\"true\"");
-        if (nbAdsLoaded >= nbEzoicAdsPresent) {
+        var nbEzoicAdsLoaded = nbOfOccurrences(document.body.innerHTML, "data-load-complete=\"true\"");
+        if (nbEzoicAdsLoaded >= nbEzoicAdsPresent) {
             return 2;
         }
         return 1;
