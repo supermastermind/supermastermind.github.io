@@ -46,9 +46,9 @@
   var time_ini = new Date().getTime();
   function instr() {
     var duration = (new Date().getTime() - time_ini) / 1000;
-    console.log("-> " + duration + "s: " + checkEzoicAdsPresence());
+    console.log("-> " + duration + "s: " + checkEzoicAdsPresence() + (checkEzoicAdsFullyLoaded() ? " completed" : ""));
     if (duration <= 10) {
-        setTimeout("instr()", 50);
+        setTimeout("instr()", 10);
     }
   }
   instr();
