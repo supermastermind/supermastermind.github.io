@@ -46,10 +46,10 @@
   var period_cnt = 1;
   var time_ini = new Date().getTime();
   function instr() {
-    console.log("-> " + (new Date().getTime() - time_ini)/1000 + ": " + checkEzoicAdsPresence());
+    console.log("-> " + (new Date().getTime() - time_ini)/1000 + "s: " + checkEzoicAdsPresence());
     period_cnt++;
     if (period_cnt <= 10) {
-        setTimeout("instr()", 1000);
+        setTimeout("instr()", 100);
     }
   }
   instr();
