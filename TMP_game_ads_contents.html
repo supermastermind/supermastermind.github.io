@@ -31,6 +31,7 @@
 
     <script>
 
+/*
 // Define a function to run when an element is loaded
 function elementOnLoad() {
   // Do something when the element is loaded
@@ -92,6 +93,50 @@ var options = {
 
 // Start observing the document body with the options
 observer.observe(document.body, options);
+*/
+
+// Define a function to run when a <div> element with the class myClass is added
+function divAdded() {
+  // Do something when the <div> element is added
+  console.log("A <div> element with the class myClass has been added");
+}
+
+// Define a function to run when a mutation occurs
+var last_node = null;
+var last_ezoic_node = null;
+function mutationCallback(mutations) {
+  // Loop through the mutations
+  for (var mutation of mutations) {
+    // Check if the mutation type is childList
+    if (mutation.type === "childList") {
+      // Loop through the added nodes
+      for (var node of mutation.addedNodes) {
+        // Check if the node is a <div> element with the class myClass
+        console.log("TOTO" + node.nodeType + node.nodeName + node.class);
+        last_node = node;
+        // document.body.innerHTML shows <div class=\"ezoic-basic-ad\"><span id=\"ezoic-pub-ad-placeholder-103\"><div><span class=\"ezoic-ad\" style=\"display:block !important;float:none !important;line-height:0px;margin-bottom:15px !important;margin-left:auto !important;margin-right:auto !important;margin-top:15px !important;max-width:100% !important;min-height:90px;min-width:970px;padding:0;text-align:center !important;\" data-ez-name=\"supermastermind_github_io-box-2\"><span id=\"div-gpt-ad-supermastermind_github_io-box-2-0\" ezaw=\"970\" ezah=\"90\" style=\"position: relative; z-index: 0; padding: 0px; min-height: 90px; min-width: 970px;\" class=\"ezoic-ad\" data-google-query-id=\"COmVtefFgYEDFfFAHQkdK5wL0A\"><div id=\"google_ads_iframe_/21732118914,22945430322/supermastermind_github_io-box-2_0__container__\" style=\"border: 0pt none;\"><iframe id=\"google_ads_iframe_/21732118914,22945430322/supermastermind_github_io-box-2_0\" name=\"google_ads_iframe_/21732118914,22945430322/supermastermind_github_io-box-2_0\" title=\"3rd party ad content\" scrolling=\"no\" marginwidth=\"0\" marginheight=\"0\" style=\"border: 0px none; vertical-align: bottom;\" role=\"region\" aria-label=\"Advertisement\" tabindex=\"0\" data-google-container-id=\"1\" data-load-complete=\"true\" width=\"970\" height=\"90\" frameborder=\"0\"></iframe></div></span></span></div></span></div>
+        if ((node.nodeType === 1) && (node.nodeName === "DIV") && (String(node.class).indexOf("ezoic-basic-ad") != -1)) {
+          // Run the divAdded function
+          last_ezoic_node = node;
+          divAdded();
+        }
+      }
+    }
+  }
+}
+
+// Create a mutation observer object with the callback function
+var observer = new MutationObserver(mutationCallback);
+
+// Specify the options for the observer
+var options = {
+  childList: true, // Observe child node additions or removals
+  subtree: true // Observe all descendants of the target node
+};
+
+// Start observing the document body with the options
+observer.observe(document.body, options);
+
 
     </script>
 
