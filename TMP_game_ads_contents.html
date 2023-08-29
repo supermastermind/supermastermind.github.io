@@ -14,188 +14,54 @@
         }
     </style>
 
-    
+    <!-- Ezoic Code -->
+    <script src="//www.ezojs.com/basicads.js?d=supermastermind.github.io" type="text/javascript"></script>
+    <!-- Ezoic Code -->
 
-    <script>/*
-    // Add an event listener for the Ezoic Ads Loaded Event
-        window.addEventListener('ezoic-ad-loaded', function(e) {
-          // Get the ad element that triggered the event
-          var ad = e.detail.ad;
-          // Do something with the ad element, such as logging its data-ez-name attribute
-          console.log("AD LOAD DETECTED:" + ad.getAttribute('data-ez-name'));
-        }); */
-    </script>
   </head>
 
 <body>
 
-    <script>
-
-/*
-// Define a function to run when an element is loaded
-function elementOnLoad() {
-  // Do something when the element is loaded
-  console.log("Element has been loaded");
-}
-
-// Define a function to run when a mutation occurs
-function mutationCallback(mutations) {
-  // Loop through the mutations
-  console.log("mutation");
-  for (var mutation of mutations) {
-    console.log("mutationloop:");
-    // Print the mutation type
-    console.log("Mutation type: " + mutation.type);
-    // Print the mutation target
-    console.log("Mutation target: " + mutation.target);
-    // Print the target node name
-    console.log("Target node name: " + mutation.target.nodeName);
-    // Print the target node type
-    console.log("Target node type: " + mutation.target.nodeType);
-    // Print the target node value
-    console.log("Target node value: " + mutation.target.nodeValue);
-    // Print the target node text content
-    console.log("Target node text content: " + mutation.target.textContent);
-    // Print the target node attributes
-    console.log("Target node attributes: ");
-    for (var i = 0; i < mutation.target.attributes.length; i++) {
-      var attr = mutation.target.attributes[i];
-      console.log(attr.name + " = " + attr.value);
-    }
-  
-
-    // Print the number of added nodes
-    console.log("Number of added nodes: " + mutation.addedNodes.length);
-    // Print the number of removed nodes
-    console.log("Number of removed nodes: " + mutation.removedNodes.length);
-    // Check if the mutation type is childList
-    if (mutation.type === "childList") {
-      // Loop through the added nodes
-      for (var node of mutation.addedNodes) {
-        // Check if the node has the data-ez-name attribute
-        //if (node.hasAttribute("data-ez-name")) {
-          // Add an onload listener to the node
-          node.addEventListener("load", elementOnLoad);
-        //}
-      }
-    }
-  }
-}
-
-// Create a mutation observer object with the callback function
-var observer = new MutationObserver(mutationCallback);
-
-// Specify the options for the observer
-var options = {
-  childList: true, // Observe child node additions or removals
-  subtree: true // Observe all descendants of the target node
-};
-
-// Start observing the document body with the options
-observer.observe(document.body, options);
-*/
-
-// Define a function to run when a <div> element with the class myClass is added
-function divAdded() {
-  // Do something when the <div> element is added
-  console.log("A <div> element with the class myClass has been added");
-}
-
-// Define a function to run when a mutation occurs
-var nodes = new Array(100);
-var node_idx = 0;
-var last_ezoic_node = null;
-function mutationCallback(mutations) {
-  // Loop through the mutations
-  for (var mutation of mutations) {
-    // Check if the mutation type is childList
-    if (mutation.type === "childList") {
-      // Loop through the added nodes
-      for (var node of mutation.addedNodes) {
-        // Check if the node is a <div> element with the class myClass
-        console.log("TOTO" + node.nodeType + node.nodeName + node.class);
-        nodes[node_idx] = node;
-        node_idx++;
-        // document.body.innerHTML shows <div class=\"ezoic-basic-ad\"><span id=\"ezoic-pub-ad-placeholder-103\"><div><span class=\"ezoic-ad\" style=\"display:block !important;float:none !important;line-height:0px;margin-bottom:15px !important;margin-left:auto !important;margin-right:auto !important;margin-top:15px !important;max-width:100% !important;min-height:90px;min-width:970px;padding:0;text-align:center !important;\" data-ez-name=\"supermastermind_github_io-box-2\"><span id=\"div-gpt-ad-supermastermind_github_io-box-2-0\" ezaw=\"970\" ezah=\"90\" style=\"position: relative; z-index: 0; padding: 0px; min-height: 90px; min-width: 970px;\" class=\"ezoic-ad\" data-google-query-id=\"COmVtefFgYEDFfFAHQkdK5wL0A\"><div id=\"google_ads_iframe_/21732118914,22945430322/supermastermind_github_io-box-2_0__container__\" style=\"border: 0pt none;\"><iframe id=\"google_ads_iframe_/21732118914,22945430322/supermastermind_github_io-box-2_0\" name=\"google_ads_iframe_/21732118914,22945430322/supermastermind_github_io-box-2_0\" title=\"3rd party ad content\" scrolling=\"no\" marginwidth=\"0\" marginheight=\"0\" style=\"border: 0px none; vertical-align: bottom;\" role=\"region\" aria-label=\"Advertisement\" tabindex=\"0\" data-google-container-id=\"1\" data-load-complete=\"true\" width=\"970\" height=\"90\" frameborder=\"0\"></iframe></div></span></span></div></span></div>
-        if ((node.nodeType === 1) && (node.nodeName === "DIV") && (String(node.class).indexOf("ezoic-basic-ad") != -1)) {
-          // Run the divAdded function
-          last_ezoic_node = node;
-          divAdded();
+  <script>
+    var last_ezoic_ad;
+    var last_ezoic_ads_cnt = 0;
+    function checkEzoicAdsPresence() {
+        // Get all ezoic ads elements currently inserted
+        var ads = document.querySelectorAll("[data-ez-name]"); // data-ez-name is part of ad's attributes
+        var ads_cnt = 0;
+        ads.forEach(function(ad) {
+          last_ezoic_ad = ad;
+          ads_cnt++;
+        });
+        if (ads_cnt != last_ezoic_ads_cnt) {
+            last_ezoic_ads_cnt = ads_cnt;
+            console.log("Ezoic ads found: " + ads_cnt);
         }
-      }
+        return last_ezoic_ads_cnt;
+    }
+    function checkEzoicAdsFullyLoaded() {
+        return (document.body.innerHTML.indexOf("data-load-complete=\"true\"") != -1);
+    }
+
+  var period_cnt = 1;
+  var time_ini = new Date().getTime();
+  function instr() {
+    console.log("-> " + (new Date().getTime() - time_ini)/1000 + ": " + checkEzoicAdsPresence());
+    period_cnt++;
+    if (period_cnt <= 10) {
+        setTimeout("instr()", 1000);
     }
   }
-}
+  instr();
 
-// Create a mutation observer object with the callback function
-var observer = new MutationObserver(mutationCallback);
+  </script>
 
-// Specify the options for the observer
-var options = {
-  childList: true, // Observe child node additions or removals
-  subtree: true // Observe all descendants of the target node
-};
-
-// Start observing the document body with the options
-observer.observe(document.body, options);
-
-
-    </script>
-
-    <!-- Ezoic Code -->
-    <script src="//www.ezojs.com/basicads.js?d=supermastermind.github.io" type="text/javascript"></script>
-    <!-- Ezoic Code -->
 
   <center>
   <font style='font-family: Trebuchet MS;font-size:1rem;'>Some ads may be diplayed here<br>
   <div class="ezoic-basic-ad"></div>
   </center>
 
-  <script>
-  var my_ad;
-/*    function runAfterPageLoad() {
-        console.log("runAfterPageLoad executed");
-        // Get all the ezoic ads elements
-        var ads = document.querySelectorAll("[data-ez-name]");
-
-        // Define a function to be called when all ads are loaded
-        function allAdsLoaded() {
-          // Do something here
-          console.log("All ads loaded!");
-        }
-
-        // Define a counter for the number of ads loaded
-        var adsLoaded = 0;
-
-        // Add an event listener to each ad element
-        ads.forEach(function(ad) {
-          my_ad = ad;
-          console.log("addEventListener" + ad);
-          ad.addEventListener("load", function() {
-            // Increment the counter
-            adsLoaded++;
-            // Check if all ads are loaded
-            if (adsLoaded === ads.length) {
-              // Call the function
-              allAdsLoaded();
-            }
-          });
-        }); */
-
-    function checkAds() {
-        console.log("checkAds");
-        // Get all the ezoic ads elements
-        var last_ad;
-        var ads = document.querySelectorAll("[data-ez-name]");
-        var ads_cnt = 0;
-        ads.forEach(function(ad) {
-            last_ad = ad;
-          ads_cnt++;
-        });
-        console.log("Ads found: " + ads_cnt);
-    }
-  
-  </script>
 </body>
 
 </html>
