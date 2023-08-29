@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" style='min-width:100%;min-height:100%;'>
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex"> <!-- (this page shall be preferably accessed from the main site page) -->
+
+    <style>
+        body {
+          color: #DDDDDD;
+          background-color: #F7F7F7;
+          background-image: url("Ads.png");
+          background-repeat: repeat;
+        }
+    </style>
+
+    
+
+    <script>/*
+    // Add an event listener for the Ezoic Ads Loaded Event
+        window.addEventListener('ezoic-ad-loaded', function(e) {
+          // Get the ad element that triggered the event
+          var ad = e.detail.ad;
+          // Do something with the ad element, such as logging its data-ez-name attribute
+          console.log("AD LOAD DETECTED:" + ad.getAttribute('data-ez-name'));
+        }); */
+    </script>
+
+    <script>/*
+        (function(){
+            var ads = document.querySelectorAll("[data-ez-name]")
+
+            // Add MutationObservers to all ad containers
+            ads.forEach(function(ad){
+                observer = new MutationObserver(mutationCallback);
+                observer.ad = ad
+                observer.observe(ad, {
+                    childList: true,
+                    subtree: true
+                })
+            })
+
+            function mutationCallback(mutations, observer) {
+                for(var mutation of mutations) {
+                    if (mutation.type === 'childList') {
+                        mutation.addedNodes.forEach(function(addedNode) {
+                            if (addedNode.nodeName.toLowerCase() == "iframe") {
+                                addedNode.addEventListener('load', function(){
+                                    trackEzoicAdImpression(observer.ad)
+                                })
+                            }
+                        })
+                    }
+                }
+            }
+
+            function trackEzoicAdImpression(elem) {
+                console.log("ADS IMPRESSION2" + elem);
+            }
+        })()*/
+        
+        var observer = new MutationObserver(function(mutations) {
+          // Loop through the mutations
+          mutations.forEach(function(mutation) {
+            // Check if new nodes were added
+            if (mutation.addedNodes.length > 0) {
+              // Loop through the added nodes
+              mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                // Check if the node has the data-ez-name attribute
+                if (node.hasAttribute('data-ez-name')) {
+                  // Do something with the node, such as logging its value
+                  console.log("ADS ADDITION DETECTED!");
+                  console.log(node.getAttribute('data-ez-name'));
+                }
+                }
+              });
+            }
+          });
+        });
+
+    </script>
+
+    <!-- Ezoic Code -->
+    <script src="//www.ezojs.com/basicads.js?d=supermastermind.github.io" type="text/javascript"></script>
+    <!-- Ezoic Code -->
+  </head>
+
+<body>
+  <script>
+
+
+        // Start observing the body element for child node changes
+        observer.observe(document.body, {childList: true});
+
+  </script>
+
+  <center>
+  <font style='font-family: Trebuchet MS;font-size:1rem;'>Some ads may be diplayed here<br>
+  <div class="ezoic-basic-ad"></div>
+  </center>
+
+  <script>
+    function runAfterPageLoad() {
+        console.log("runAfterPageLoad executed");
+        // Get all the ezoic ads elements
+        var ads = document.querySelectorAll("[data-ez-name]");
+
+        // Define a function to be called when all ads are loaded
+        function allAdsLoaded() {
+          // Do something here
+          console.log("All ads loaded!");
+        }
+
+        // Define a counter for the number of ads loaded
+        var adsLoaded = 0;
+
+        // Add an event listener to each ad element
+        ads.forEach(function(ad) {
+          console.log("addEventListener");
+          ad.addEventListener("load", function() {
+            // Increment the counter
+            adsLoaded++;
+            // Check if all ads are loaded
+            if (adsLoaded === ads.length) {
+              // Call the function
+              allAdsLoaded();
+            }
+          });
+        });
+    }
+    window.addEventListener("load", runAfterPageLoad);
+  </script>
+</body>
+
+</html>
