@@ -75,13 +75,15 @@ In this algorithm, only the possible/logical codes are considered at each stage 
             }
         }
         if ((ads_iframe != null) && wereAdsLoaded) { // this condition will becomre true some time after ads_iframe creation 
-            ads_iframe.style.display = 'block';
+            // ads_iframe.style.display = 'block';
+            ads_iframe.style.zIndex = '10';
         }
     }
 
     function stopShowingAds() {
         if (ads_iframe != null) {
-            ads_iframe.style.display = 'none';
+            // ads_iframe.style.display = 'none';
+            ads_iframe.style.zIndex = '-1';
         }
     }
 
