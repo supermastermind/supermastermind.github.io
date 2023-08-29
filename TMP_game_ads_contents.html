@@ -25,108 +25,79 @@
           console.log("AD LOAD DETECTED:" + ad.getAttribute('data-ez-name'));
         }); */
     </script>
+  </head>
 
-    <script>/*
-        (function(){
-            var ads = document.querySelectorAll("[data-ez-name]")
+<body>
 
-            // Add MutationObservers to all ad containers
-            ads.forEach(function(ad){
-                observer = new MutationObserver(mutationCallback);
-                observer.ad = ad
-                observer.observe(ad, {
-                    childList: true,
-                    subtree: true
-                })
-            })
+    <script>
 
-            function mutationCallback(mutations, observer) {
-                for(var mutation of mutations) {
-                    if (mutation.type === 'childList') {
-                        mutation.addedNodes.forEach(function(addedNode) {
-                            if (addedNode.nodeName.toLowerCase() == "iframe") {
-                                addedNode.addEventListener('load', function(){
-                                    trackEzoicAdImpression(observer.ad)
-                                })
-                            }
-                        })
-                    }
-                }
-            }
+// Define a function to run when an element is loaded
+function elementOnLoad() {
+  // Do something when the element is loaded
+  console.log("Element has been loaded");
+}
 
-            function trackEzoicAdImpression(elem) {
-                console.log("ADS IMPRESSION2" + elem);
-            }
-        })()*/
-
-// Create a new MutationObserver instance
-var observer = new MutationObserver(function(mutations) {
+// Define a function to run when a mutation occurs
+function mutationCallback(mutations) {
   // Loop through the mutations
-  mutations.forEach(function(mutation) {
-    // Check if new nodes were added
-    if (mutation.addedNodes.length > 0) {
-      // Loop through the added nodes
-      mutation.addedNodes.forEach(function(node) {
-        // Check if the node is an element node
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          // Check if the node has the data-ez-name attribute
-          if (node.hasAttribute('data-ez-name')) {
-            // Do something with the node, such as logging its value
-            console.log(node.getAttribute('data-ez-name'));
-            // Print something to the console
-            console.log('A new data-ez-name element was added');
-          }
-        }
-      });
+  console.log("mutation");
+  for (var mutation of mutations) {
+    console.log("mutationloop:");
+    // Print the mutation type
+    console.log("Mutation type: " + mutation.type);
+    // Print the mutation target
+    console.log("Mutation target: " + mutation.target);
+    // Print the target node name
+    console.log("Target node name: " + mutation.target.nodeName);
+    // Print the target node type
+    console.log("Target node type: " + mutation.target.nodeType);
+    // Print the target node value
+    console.log("Target node value: " + mutation.target.nodeValue);
+    // Print the target node text content
+    // console.log("Target node text content: " + mutation.target.textContent);
+    // Print the target node attributes
+    console.log("Target node attributes: ");
+    for (var i = 0; i < mutation.target.attributes.length; i++) {
+      var attr = mutation.target.attributes[i];
+      console.log(attr.name + " = " + attr.value);
     }
-  });
-});
+  
 
-// Start observing the body element for child node changes
-observer.observe(document.head, {childList: true});
+    // Print the number of added nodes
+    console.log("Number of added nodes: " + mutation.addedNodes.length);
+    // Print the number of removed nodes
+    console.log("Number of removed nodes: " + mutation.removedNodes.length);
+    // Check if the mutation type is childList
+    if (mutation.type === "childList") {
+      // Loop through the added nodes
+      for (var node of mutation.addedNodes) {
+        // Check if the node has the data-ez-name attribute
+        //if (node.hasAttribute("data-ez-name")) {
+          // Add an onload listener to the node
+          node.addEventListener("load", elementOnLoad);
+        //}
+      }
+    }
+  }
+}
 
+// Create a mutation observer object with the callback function
+var observer = new MutationObserver(mutationCallback);
+
+// Specify the options for the observer
+var options = {
+  childList: true, // Observe child node additions or removals
+  subtree: true // Observe all descendants of the target node
+};
+
+// Start observing the document body with the options
+observer.observe(document.body, options);
 
     </script>
 
     <!-- Ezoic Code -->
     <script src="//www.ezojs.com/basicads.js?d=supermastermind.github.io" type="text/javascript"></script>
     <!-- Ezoic Code -->
-
-  </head>
-
-<body>
-  <script>
-
-// Create a new MutationObserver instance
-var observer2 = new MutationObserver(function(mutations) {
-  // Loop through the mutations
-  mutations.forEach(function(mutation) {
-    // Check if new nodes were added
-    if (mutation.addedNodes.length > 0) {
-      // Loop through the added nodes
-      mutation.addedNodes.forEach(function(node) {
-        // Check if the node is an element node
-        if (node.nodeType === Node.ELEMENT_NODE) {
-          // Check if the node has the data-ez-name attribute
-          if (node.hasAttribute('data-ez-name')) {
-            // Do something with the node, such as logging its value
-            console.log(node.getAttribute('data-ez-name'));
-            // Print something to the console
-            console.log('A new data-ez-name element was added #2');
-          }
-        }
-      });
-    }
-  });
-});
-
-// Start observing the body element for child node changes
-observer2.observe(document.head, {childList: true});
-
-
-  </script>
-
-
 
   <center>
   <font style='font-family: Trebuchet MS;font-size:1rem;'>Some ads may be diplayed here<br>
@@ -162,9 +133,21 @@ observer2.observe(document.head, {childList: true});
               allAdsLoaded();
             }
           });
+        }); */
+
+    function checkAds() {
+        console.log("checkAds");
+        // Get all the ezoic ads elements
+        var last_ad;
+        var ads = document.querySelectorAll("[data-ez-name]");
+        var ads_cnt = 0;
+        ads.forEach(function(ad) {
+            last_ad = ad;
+          ads_cnt++;
         });
-    } */
-    // window.addEventListener("load", runAfterPageLoad);
+        console.log("Ads found: " + ads_cnt);
+    }
+  
   </script>
 </body>
 
