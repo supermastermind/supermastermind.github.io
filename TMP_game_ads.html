@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" style='min-width:100%;min-height:100%;'>
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex"> <!-- (this page shall be preferably accessed from the main site page) -->
+
+    <style>
+      .ads_button_class {
+        font-family: Trebuchet MS;
+        background-color: white;
+        border-radius: 20%;
+        color: black;
+        font-size: 1rem;
+        padding: 1.0vh 0.5vw 1.0vh 0.5vw; /* top right bottom left */
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
+        display: block;
+        margin: 0;
+        -webkit-backface-visibility: visible;
+      }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="style/style.css">
+    <!-- XXX text style shall be as in index.html -->
+
+    <script>
+      var my_button = null;
+      function startGame() {
+        if ( (my_button == null) || (!my_button.disabled) ) {
+          localStorage.lastGameAdsDisplayTime = (new Date()).getTime(); // line duplicated in TMP_game.html
+          window.parent.postMessage("stopShowingAdsMsg", "*"); // (direct function call between child and parent iframes is not allowed => a message is posted)
+        }
+      }
+    </script>
+  </head>
+
+  <body style="background-color:#F7F7F7;width:100%;height:100%">
+    <center>
+    <br>
+    <a onclick="startGame();"><img alt='Get it on Google Play' style='width:5.5rem;margin-top:0.5rem;margin-bottom:0.5rem;border-radius:7%' src='img/Playstore_icon.png'/></a>
+    <br>
+    <div style='width:80%;margin:0'>
+        To bring (small) revenue to the website, ads are sometimes displayed.<br>Have a look at them if you're interested, then just click below button to start playing:</b>
+    </div>
+    <br>
+    <button id='ads_button' class='ads_button_class' onclick="startGame();"></button>
+    <br>
+
+    <script>
+        my_button = document.getElementById('ads_button');
+        my_button.disabled = true;
+        var adsDisplayTimeInSeconds = 10;
+        for (var i = 0; i <= adsDisplayTimeInSeconds; i++) {
+            var timeToWait = i*1000;
+            if (i < adsDisplayTimeInSeconds) {
+                setTimeout("my_button.innerHTML = '&nbsp;Please wait for " + (adsDisplayTimeInSeconds - i) + " s&nbsp;';", timeToWait);
+            }
+            else {
+                setTimeout("my_button.disabled = false; my_button.style.color = 'red'; my_button.style.fontSize = '130%'; my_button.innerHTML = '&nbsp;&nbsp;&nbsp;START PLAYING&nbsp;&nbsp;&nbsp;';", timeToWait);
+            }
+        }
+    </script>
+
+    <div style="width:80%;"><span style="border:0px;border-radius:20%;color:#FFFFFF;background-color:#BBBBBB"><small><b>&nbsp;&nbsp;Ads&nbsp;&nbsp;</b></small></span></div>
+    <iframe src="TMP_game_ads_contents.html" style="width:80%; height:40vh; border: 1px solid #AAAAAA; border-radius:10%" scrolling="no"></iframe>
+
+    </center>
+  </body>
+
+</html>
