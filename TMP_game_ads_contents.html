@@ -43,13 +43,12 @@
         return (document.body.innerHTML.indexOf("data-load-complete=\"true\"") != -1);
     }
 
-  var period_cnt = 1;
   var time_ini = new Date().getTime();
   function instr() {
-    console.log("-> " + (new Date().getTime() - time_ini)/1000 + "s: " + checkEzoicAdsPresence());
-    period_cnt++;
-    if (period_cnt <= 10) {
-        setTimeout("instr()", 100);
+    var duration = (new Date().getTime() - time_ini) / 1000;
+    console.log("-> " + duration + "s: " + checkEzoicAdsPresence());
+    if (duration <= 10) {
+        setTimeout("instr()", 50);
     }
   }
   instr();
