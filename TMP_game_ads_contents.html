@@ -58,26 +58,6 @@
                 console.log("ADS IMPRESSION2" + elem);
             }
         })()*/
-        
-        var observer = new MutationObserver(function(mutations) {
-          // Loop through the mutations
-          mutations.forEach(function(mutation) {
-            // Check if new nodes were added
-            if (mutation.addedNodes.length > 0) {
-              // Loop through the added nodes
-              mutation.addedNodes.forEach(function(node) {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                // Check if the node has the data-ez-name attribute
-                if (node.hasAttribute('data-ez-name')) {
-                  // Do something with the node, such as logging its value
-                  console.log("ADS ADDITION DETECTED!");
-                  console.log(node.getAttribute('data-ez-name'));
-                }
-                }
-              });
-            }
-          });
-        });
 
     </script>
 
@@ -89,9 +69,31 @@
 <body>
   <script>
 
+// Create a new MutationObserver instance
+var observer = new MutationObserver(function(mutations) {
+  // Loop through the mutations
+  mutations.forEach(function(mutation) {
+    // Check if new nodes were added
+    if (mutation.addedNodes.length > 0) {
+      // Loop through the added nodes
+      mutation.addedNodes.forEach(function(node) {
+        // Check if the node is an element node
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          // Check if the node has the data-ez-name attribute
+          if (node.hasAttribute('data-ez-name')) {
+            // Do something with the node, such as logging its value
+            console.log(node.getAttribute('data-ez-name'));
+            // Print something to the console
+            console.log('A new data-ez-name element was added');
+          }
+        }
+      });
+    }
+  });
+});
 
-        // Start observing the body element for child node changes
-        observer.observe(document.body, {childList: true});
+// Start observing the body element for child node changes
+observer.observe(document.body, {childList: true});
 
   </script>
 
@@ -101,7 +103,7 @@
   </center>
 
   <script>
-    function runAfterPageLoad() {
+/*    function runAfterPageLoad() {
         console.log("runAfterPageLoad executed");
         // Get all the ezoic ads elements
         var ads = document.querySelectorAll("[data-ez-name]");
@@ -128,8 +130,8 @@
             }
           });
         });
-    }
-    window.addEventListener("load", runAfterPageLoad);
+    } */
+    // window.addEventListener("load", runAfterPageLoad);
   </script>
 </body>
 
