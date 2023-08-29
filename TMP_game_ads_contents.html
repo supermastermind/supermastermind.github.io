@@ -61,9 +61,6 @@
 
     </script>
 
-    <!-- Ezoic Code -->
-    <script src="//www.ezojs.com/basicads.js?d=supermastermind.github.io" type="text/javascript"></script>
-    <!-- Ezoic Code -->
   </head>
 
 <body>
@@ -93,9 +90,17 @@ var observer = new MutationObserver(function(mutations) {
 });
 
 // Start observing the body element for child node changes
+observer.observe(document.head, {childList: true});
+
+// Start observing the body element for child node changes
 observer.observe(document.body, {childList: true});
 
   </script>
+
+    <!-- Ezoic Code -->
+    <script src="//www.ezojs.com/basicads.js?d=supermastermind.github.io" type="text/javascript"></script>
+    <!-- Ezoic Code -->
+
 
   <center>
   <font style='font-family: Trebuchet MS;font-size:1rem;'>Some ads may be diplayed here<br>
