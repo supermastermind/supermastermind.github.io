@@ -69,9 +69,10 @@
     var duration = (new Date().getTime() - time_ini) / 1000;
     var adsLoadStatus = checkIfEzoicAdsLoaded();
     console.log("-> " + duration + "s: status: " + adsLoadStatus);
-    if (adsLoadStatus) {
-        console.log("adsLoaded1");
+    if (adsLoadStatus == 3) {
+        console.log("adsLoaded1 (" + adsLoadStatus + ")");
         window.parent.parent.postMessage("adsWereLoaded", "*"); // (direct function call between child and grandparent iframe is not allowed => a message is posted)
+        return;
     }
     if (duration <= 60) { // 60 seconds - in practice, wait for 1 minute with 0.5? second period
         setTimeout("instr()", 500);
