@@ -1,2 +1,3 @@
 # game
-Play Super Master Mind and evaluate your strategy!
+
+Play code-breaking games and evaluate your strategy!
